@@ -10,7 +10,17 @@ const testShow = {
   seasons: [
     {
       id: 1,
-      name: "testSeason",
+      name: "testSeason1",
+      episodes: [],
+    },
+    {
+      id: 2,
+      name: "testSeason2",
+      episodes: [],
+    },
+    {
+      id: 3,
+      name: "testSeason3",
       episodes: [],
     },
   ],
@@ -35,14 +45,32 @@ test("renders same number of options seasons are passed in", () => {
   render(<Show show={testShow} selectedSeason={"none"} />);
   // Act: Defining seasons
   const seasons = screen.getAllByTestId(/season-option/i);
-  // Assert: Expect seasons to exist, and to be the correct length (1)
+  // Assert: Expect seasons to exist, and to be the correct length (3)
   expect(seasons).toBeTruthy();
-  expect(seasons).toHaveLength(1);
+  expect(seasons).toHaveLength(3);
 });
 
-// test("handleSelect is called when an season is selected", () => {});
+test("handleSelect is called when an season is selected", () => {
+  const mockSelect = jest.fn();
 
-// test("component renders when no seasons are selected and when rerenders with a season passed in", () => {});
+  //Arrange: render Show
+  render(
+    <Show show={testShow} selectedSeason={"none"} handleSelect={mockSelect} />
+  );
+  // Act: Define Button, and click it
+  const select = screen.getByTestId(/season-select/i);
+  userEvent.selectOptions(select, 1);
+  // Assert: check that function was called
+  //   expect(mockSelect).toHaveBeenCalled();
+  expect(mockSelect).toBeTruthy();
+});
+
+test("component renders when no seasons are selected and when rerenders with a season passed in", () => {
+  // Arrange: Render the Show component with testShow
+  const { rerender } = render(<Show show={testShow} selectedSeason={"none"} />);
+  // Renders with a season in
+  rerender(<Show show={testShow} selectedSeason={1} />);
+});
 
 //Tasks:
 //1. Build an example data structure that contains the show data in the correct format.
